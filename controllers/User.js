@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 // Create a new user
 const createUser = () => async (req, res) => {
@@ -96,13 +96,19 @@ const updateUser = () => async (req, res) => {
 // Delete a user by id
 const deleteUser = () => async (req, res) => {
   try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    const { id } = req.params;
+
+    const deletedUser = await User.findByIdAndUpdate(
+      id,
+      { isActive: false },
+      { new: true }
+    );
 
     if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ message: "User deleted successfully" });
+    res.status(200).json({ message: "User deactivated successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

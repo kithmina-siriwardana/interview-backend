@@ -1,4 +1,7 @@
+// routes/auth.js
 const express = require("express");
+const { authenticate, isAdmin } = require("../middlewares/auth");
+
 const {
   createUser,
   getAllUsers,
@@ -10,11 +13,13 @@ const {
 
 const router = express.Router();
 
+router.use(authenticate);
+
 router.post("/", createUser());
 router.get("/", getAllUsers());
 router.get("/:id", getUserById());
 router.get("/email/:email", getUserByEmail());
 router.patch("/:id", updateUser());
-router.delete("/:id", deleteUser());
+router.delete("/:id", isAdmin, deleteUser());
 
 module.exports = router;
