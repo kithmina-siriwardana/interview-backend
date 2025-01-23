@@ -9,17 +9,12 @@ const port = process.env.PORT || 3010;
 
 app.use(express.json());
 
-console.log(process.env.MONGODB_URI);
-
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((error) => console.log("Error connecting to MongoDB", error));
 
