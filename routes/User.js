@@ -1,4 +1,3 @@
-// routes/auth.js
 const express = require("express");
 const { authenticate, isAdmin } = require("../middlewares/auth");
 
