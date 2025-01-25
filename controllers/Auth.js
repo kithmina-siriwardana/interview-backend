@@ -22,7 +22,7 @@ const loginUser = () => async (req, res) => {
     // Generate JWT token
     const token = generateToken(user._id, user.name, user.email, user.role);
 
-    res.status(200).json({ token });
+    res.status(200).json({ token, role: user.role });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

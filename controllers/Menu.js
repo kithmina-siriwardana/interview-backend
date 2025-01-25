@@ -56,7 +56,17 @@ const createMenuItem = () => async (req, res) => {
 // Get all menu items
 const getAllMenuItems = () => async (_req, res) => {
   try {
-    const menuItems = await Menu.find();
+    const menuItems = await Menu.find().sort({ isActive: -1, createdAt: -1 });
+    res.status(200).json(menuItems);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// get all active menu items
+const getAllActiveMenuItems = () => async (_req, res) => {
+  try {
+    const menuItems = await Menu.find({ isActive: true });
     res.status(200).json(menuItems);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -160,13 +170,39 @@ const deleteMenuItem = () => async (req, res) => {
   }
 };
 
+// Get latest 3 menu items
+const getLatestMenuItems = () => async (_req, res) => {
+  try {
+    const menuItems = await Menu.find({ isActive: true })
+      .sort({ createdAt: -1 })
+      .limit(3);
+
+    res.status(200).json(menuItems);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Get number of menu items
+const getMenuItemCount = () => async (_req, res) => {
+  try {
+    const menuItemCount = await Menu.countDocuments({ isActive: true });
+    res.status(200).json(menuItemCount);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createMenuItem,
   getAllMenuItems,
+  getAllActiveMenuItems,
   getMenuItemById,
   getMenuItemByItemNo,
   getMenuItemsByCategory,
   getMenuItemsByType,
+  getLatestMenuItems,
+  getMenuItemCount,
   updateMenuItem,
   deleteMenuItem,
 };
